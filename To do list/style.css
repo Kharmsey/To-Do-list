@@ -1,0 +1,141 @@
+body {
+    background-color: rgb(14, 90, 90);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+header {
+    font-size: 1.5rem;
+}
+
+header, form {
+    min-height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+form input, form button {
+    padding: 0.5rem;
+    padding-left: 1rem;
+    font-size: 1.0rem;
+    border: none;
+    background: white;
+    border-radius: 2rem;
+}
+
+form button {
+    color: black;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 0.5rem;
+    padding-inline: 1rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+form button:hover {
+    color: rgb(19, 19, 114);
+    background: rgb(85, 76, 204);
+}
+
+.todo-list {
+    min-width: 30%;
+    list-style: none;
+
+}
+
+.todo {
+    margin: 0.5rem;
+    padding-left: 0.5rem;
+    background: white;
+    color: black;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-radius: 2rem;
+}
+
+.todo li {
+    flex: 1;
+}
+
+.trash-btn, .complete-btn {
+    color: rgb(243, 236, 236);
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.complete-btn {
+    background-color: aqua;
+}
+
+.trash-btn {
+    border-top-right-radius: 1.75rem;
+    border-bottom-right-radius: 1.75rem;
+    background: blueviolet;
+}
+
+.todo-item {
+    padding: 0rem 0.5rem;
+
+}
+
+.completed {
+    text-decoration: line-through;
+    color: grey;
+    opacity: 0.5;
+}
+
+.slide {
+    transform: translateX(10%);
+    opacity: 0;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    border: none;
+    
+}
+
+.select {
+    margin: 1rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+select {
+    color: black;
+    width: 10rem;
+    height: 3rem;
+    cursor: pointer;
+    padding: 1rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 0.9rem; 
+}
+
+.select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    background: rgb(28, 115, 165);
+    pointer-events: none;
+}
+
+.select:hover::after {
+    background: black;
+    color: rgb(28, 115, 165);
+}
+

@@ -1,55 +1,107 @@
-// Select elements
-const taskInput = document.getElementById('task-input');
-const addButton = document.getElementById('add-btn');
-const taskList = document.getElementById('task-list');
+const todoInput = document.getElementById("todo-input");
+const addButton = document.getElementById("add-button");
+const todoList = document.getElementById("todo-list");
+const filterOption = document.querySelector(".filter-todo");
 
-// function to add
+document.getElementById("year").textContent = new Date().getFullYear();
 
-function addTask() {
-    const taskText = taskInput.value.trim();
+// Event Listeners
+document.addEventListener("DOMContentLoaded", loadTodosFromLocal);
+addButton.addEventListener("click", addTodo);
+todoList.addEventListener("click", handleTodoAction);
+filterOption.addEventListener("change", filterTodos);
 
-    if (tasktext !== '') {
-        
-        // Create new list item
-        const li = document.createElement('li');
-        li.textContent = taskText;
+// Add a new todo
+function addTodo(event) {
+  event.preventDefault();
 
-        // Add a button to mark as done
-        const doneButton = document.createElement('button');
-        doneButton.textContent = 'Done';
-        doneButton.onclick = function () {
-            li.classList.toggle('done');
-        };
+  if (todoInput.value.trim() === "") return; // Prevent adding empty todos
 
-        // Add button to delete the task
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'delete';
-        deleteButton.onclick = function () {
-            taskList.removeChild(li);
-        };
+  const todoDiv = createTodoElement(todoInput.value);
+  todoList.appendChild(todoDiv);
 
-        //Append button to the list item
-        li.appendChild(doneButton);
-        li.appendChild(deleteButton);
-
-
-        // Add task to the list
-        taskList.appendChild(li);
-
-        // Clear input field
-        taskInput.value = '';
-    
-    }
-
+  saveTodoToLocal(todoInput.value);
+  todoInput.value = ""; // Clear input field
 }
 
-// add event listener to the add task button
-addButton.addEventListener(click, addTask)
+// Create a todo element
+function createTodoElement(text) {
+  const todoDiv = document.createElement("div");
+  todoDiv.classList.add("todo");
 
-// Allow pressing enter to add the task
-taskInput.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        addTask();
+  const newTodo = document.createElement("li");
+  newTodo.textContent = text;
+  newTodo.classList.add("todo-item");
+  todoDiv.appendChild(newTodo);
+
+  const completedButton = document.createElement("button");
+  completedButton.innerHTML = "✔";
+  completedButton.classList.add("complete-btn");
+  todoDiv.appendChild(completedButton);
+
+  const trashButton = document.createElement("button");
+  trashButton.innerHTML = "✖";
+  trashButton.classList.add("trash-btn");
+  todoDiv.appendChild(trashButton);
+
+  return todoDiv;
+}
+
+// Handle complete and delete actions
+function handleTodoAction(event) {
+  const item = event.target;
+
+  if (item.classList.contains("trash-btn")) {
+    const todo = item.parentElement;
+    todo.classList.add("slide");
+    removeTodoFromLocal(todo.children[0].innerText);
+    todo.addEventListener("transitionend", () => todo.remove());
+  }
+
+  if (item.classList.contains("complete-btn")) {
+    item.parentElement.classList.toggle("completed");
+  }
+}
+
+// Filter todos based on selection
+function filterTodos(event) {
+  const todos = todoList.childNodes;
+  todos.forEach(todo => {
+    if (todo.nodeType === 1) { // Ensure it's an element node
+      switch (event.target.value) {
+        case "all":
+          todo.style.display = "flex";
+          break;
+        case "completed":
+          todo.style.display = todo.classList.contains("completed") ? "flex" : "none";
+          break;
+        case "uncompleted":
+          todo.style.display = !todo.classList.contains("completed") ? "flex" : "none";
+          break;
+      }
     }
-    
-});
+  });
+}
+
+// Save todo to local storage
+function saveTodoToLocal(todo) {
+  const todos = JSON.parse(localStorage.getItem("todos")) || [];
+  todos.push(todo);
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+// Load todos from local storage
+function loadTodosFromLocal() {
+  const todos = JSON.parse(localStorage.getItem("todos")) || [];
+  todos.forEach(todoText => {
+    const todoDiv = createTodoElement(todoText);
+    todoList.appendChild(todoDiv);
+  });
+}
+
+// Remove todo from local storage
+function removeTodoFromLocal(todoText) {
+  const todos = JSON.parse(localStorage.getItem("todos")) || [];
+  const updatedTodos = todos.filter(todo => todo !== todoText);
+  localStorage.setItem("todos", JSON.stringify(updatedTodos));
+}
